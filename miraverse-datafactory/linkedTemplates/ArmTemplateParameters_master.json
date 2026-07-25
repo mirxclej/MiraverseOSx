@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "miraverse-datafactory"
 		},
+		"CosmosDbmiraverse_connectionString": {
+			"value": ""
+		},
 		"miraverseblob_connectionString": {
 			"value": ""
 		},

@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "miraverse-datafactory"
 		},
+		"CosmosDbmiraverse_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbmiraverse'"
+		},
 		"miraverseblob_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'miraverseblob'"
@@ -37,6 +41,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"CosmosDbmiraverse_connectionString": {
+						"value": "[parameters('CosmosDbmiraverse_connectionString')]"
 					},
 					"miraverseblob_connectionString": {
 						"value": "[parameters('miraverseblob_connectionString')]"
