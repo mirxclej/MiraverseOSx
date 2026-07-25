@@ -1,0 +1,64 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "miraverse-datafactory"
+		},
+		"miraverseblob_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'miraverseblob'"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DataExcel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "miraverseblob",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Lore_Entries",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MIRAVERSEOSX Game Design Document.xlsx",
+						"container": "miraverseosx-data"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "MIRAVERSEOSX — World Lore Database",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/miraverseblob')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/miraverseblob')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('miraverseblob_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
