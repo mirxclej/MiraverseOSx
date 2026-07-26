@@ -15,6 +15,7 @@ export default function Window({ win }) {
 
   const Body = getContent(win.contentKey);
   const isActive = activeWindowId === win.id;
+  const isGameplayWindow = win.kind === 'gameplay';
 
   const handlePointerDown = (e) => {
     if (win.isMaximized) return;
@@ -29,8 +30,14 @@ export default function Window({ win }) {
       const deltaX = moveEvent.clientX - startX;
       const deltaY = moveEvent.clientY - startY;
 
-      const newX = Math.max(0, Math.min(window.innerWidth - 100, initialX + deltaX));
-      const newY = Math.max(MENU_BAR_HEIGHT, Math.min(window.innerHeight - 80, initialY + deltaY));
+      const minWidth = win.minSize?.width || 420;
+      const minHeight = win.minSize?.height || 280;
+
+      const newX = Math.max(0, Math.min(window.innerWidth - minWidth, initialX + deltaX));
+      const newY = Math.max(
+        MENU_BAR_HEIGHT,
+        Math.min(window.innerHeight - minHeight - 48, initialY + deltaY)
+      );
 
       moveWindow(win.id, { x: newX, y: newY });
     };
@@ -63,9 +70,11 @@ export default function Window({ win }) {
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.95, opacity: 0 }}
       transition={{ duration: 0.15 }}
-      className="absolute flex flex-col overflow-hidden rounded-xl border border-white/15 bg-os-secondary/80 shadow-2xl backdrop-blur-xl select-none"
+      className="absolute flex flex-col overflow-hidden rounded-xl border border-white/15 bg-os-secondary/80 shadow-2xl backdrop-blur-xl"
       style={{ ...(win.isMaximized ? maximizedStyle : normalStyle), zIndex: win.zIndex }}
       onMouseDown={() => focusWindow(win.id)}
+      role="dialog"
+      aria-label={win.title}
     >
       {/* Title bar — drag handle */}
       <div
@@ -111,7 +120,11 @@ export default function Window({ win }) {
         </span>
         <span className="w-14" />
       </div>
-      <div className="min-h-0 flex-1 select-text">
+      <div
+        className={`min-h-0 flex-1 ${
+          isGameplayWindow ? 'overflow-hidden bg-black/30' : 'overflow-auto select-text'
+        }`}
+      >
         <Body />
       </div>
     </motion.div>

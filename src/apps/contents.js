@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { miraverseDb } from '../db/miraverseDb';
 import { useOSStore } from '../store/useOSStore';
+import GameplayHub from '../games/GameplayHub';
 
 const Panel = ({ children }) => (
   <div className="h-full w-full overflow-auto p-6 text-sm leading-relaxed text-white/80">
@@ -371,6 +372,7 @@ export const CONTENTS = {
   browser: Browser,
   settings: SettingsApp,
   about: About,
+  gameplay: GameplayHub,
 };
 
 export const getContent = (key) => CONTENTS[key] || (() => <Panel>Nothing here yet.</Panel>);
